@@ -9,7 +9,6 @@
     <style>
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        /* Animasi untuk Popup Notifikasi */
         .toast-animate { animation: slideUp 0.3s ease-out; }
         @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     </style>
@@ -20,7 +19,7 @@
             SMART KALKULATOR HPP
         </header>
 
-        <!-- LOGIN SECTION -->
+        <!-- SECTION LOGIN -->
         <div id="login-section" class="p-6">
             <input type="email" id="email" placeholder="Email" class="w-full p-2.5 border rounded-md mb-3 text-sm focus:outline-none focus:border-blue-500">
             <input type="password" id="password" placeholder="Password" class="w-full p-2.5 border rounded-md mb-4 text-sm focus:outline-none focus:border-blue-500">
@@ -32,7 +31,7 @@
 
         <!-- MAIN SECTION -->
         <div id="main-section" class="hidden">
-            <!-- 1. PERBAIKAN: FONT TAB DIPERBESAR & CAPS LOCK -->
+            <!-- 1. FONT TAB BESAR & TEBAL (SESUAI INSTRUKSI) -->
             <div class="flex border-b font-black text-gray-500 uppercase tracking-tighter">
                 <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-4 border-blue-600 text-blue-600 text-[13px]">DATABASE BAHAN</button>
                 <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-4 text-[13px]">KALKULATOR</button>
@@ -41,7 +40,7 @@
 
             <div id="tab-bahan" class="tab-content active p-4">
                 <div class="bg-[#f3f8ff] p-5 rounded-xl border border-blue-100 mb-6 shadow-sm">
-                    <!-- 2. PERBAIKAN: UKURAN "TAMBAH BAHAN" DIPERBESAR -->
+                    <!-- 2. UKURAN TAMBAH BAHAN DIPERBESAR -->
                     <h3 id="form-title" class="font-black text-blue-800 mb-4 text-[14px] uppercase tracking-widest">TAMBAH BAHAN BARU</h3>
                     <input type="hidden" id="edit-id">
                     
@@ -65,15 +64,13 @@
                         <input type="number" id="wastage" placeholder="Wastage %" class="w-1/2 p-2.5 border rounded-md text-sm outline-none">
                     </div>
 
-                    <!-- 3. PERBAIKAN: UKURAN "SIMPAN BAHAN" DIPERKECIL SEDIKIT -->
-                    <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#28a745] text-white p-3 rounded-lg font-bold text-sm shadow-sm active:scale-95 transition-transform uppercase">Simpan Bahan</button>
+                    <!-- 3. UKURAN SIMPAN BAHAN DIPERKECIL SEDIKIT -->
+                    <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#28a745] text-white p-3 rounded-lg font-bold text-sm shadow-sm active:scale-95 transition-transform uppercase tracking-wider">Simpan Bahan</button>
                     <button id="btn-batal" onclick="resetForm()" class="hidden w-full bg-gray-400 text-white p-2 rounded-md mt-2 text-xs font-bold uppercase">Batal</button>
                 </div>
                 
                 <h3 class="font-bold text-gray-500 mb-4 text-[11px] uppercase tracking-widest">Daftar Bahan Anda</h3>
-                <div id="list-bahan" class="space-y-3 pb-20">
-                    <!-- Data List -->
-                </div>
+                <div id="list-bahan" class="space-y-3 pb-20"></div>
             </div>
 
             <div id="tab-kalkulator" class="tab-content p-10 text-center text-gray-400 text-sm italic">Fitur Kalkulator segera hadir.</div>
@@ -83,7 +80,6 @@
         </div>
     </div>
 
-    <!-- Container untuk Popup Notifikasi -->
     <div id="toast-container"></div>
 
     <script>
@@ -91,11 +87,11 @@
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // 4. PERBAIKAN: FUNGSI POPUP NOTIFIKASI
+        // 4. POPUP NOTIFIKASI
         function showToast(message) {
             const container = document.getElementById('toast-container');
             const toast = document.createElement('div');
-            toast.className = `fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl font-bold text-xs z-50 toast-animate`;
+            toast.className = `fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl font-bold text-[11px] z-50 toast-animate`;
             toast.innerText = message;
             container.appendChild(toast);
             setTimeout(() => { toast.remove(); }, 3000);
@@ -105,7 +101,7 @@
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) alert("Email/Password Salah!");
+            if (error) alert("Login Gagal: " + error.message);
             else location.reload();
         }
 
@@ -114,7 +110,7 @@
             const password = document.getElementById('password').value;
             const { error } = await supabaseClient.auth.signUp({ email, password });
             if (error) alert(error.message);
-            else showToast("Berhasil Daftar! Silakan Login.");
+            else showToast("Berhasil Daftar! Silakan Cek Email/Login.");
         }
 
         async function handleLogout() {
@@ -122,10 +118,11 @@
             location.reload();
         }
 
+        // CEK LOGIN (DIKEMBALIKAN KE LOGIKA STABIL)
         window.onload = async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('login-section').style.display = 'none';
                 document.getElementById('main-section').classList.remove('hidden');
                 muatDaftarBahan();
             }
@@ -158,7 +155,7 @@
                 wastage: parseFloat(document.getElementById('wastage').value) || 0
             };
 
-            if(!payload.nama_bahan) return alert("Nama Bahan harus diisi!");
+            if(!payload.nama_bahan || !payload.harga_beli) return alert("Nama & Harga wajib diisi!");
 
             let res;
             if (id) {
@@ -170,10 +167,7 @@
             }
 
             if (res.error) alert(res.error.message);
-            else {
-                resetForm();
-                muatDaftarBahan();
-            }
+            else { resetForm(); muatDaftarBahan(); }
         }
 
         async function muatDaftarBahan() {
@@ -190,8 +184,8 @@
                                 <p class="text-[10px] text-gray-400 mt-1.5 font-medium uppercase tracking-tighter">${tgl} WIB | ${b.kategori}</p>
                             </div>
                             <div class="flex gap-2">
-                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1.5 rounded-md hover:bg-gray-50">EDIT</button>
-                                <button onclick="hapusBahan(${b.id})" class="border border-red-100 text-red-400 text-[10px] font-bold px-3 py-1.5 rounded-md hover:bg-red-50">HAPUS</button>
+                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1.5 rounded-md">EDIT</button>
+                                <button onclick="hapusBahan(${b.id})" class="border border-red-100 text-red-400 text-[10px] font-bold px-3 py-1.5 rounded-md">HAPUS</button>
                             </div>
                         </div>
                     `;
@@ -228,10 +222,7 @@
         async function hapusBahan(id) {
             if(confirm("Hapus bahan ini?")) {
                 const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', id);
-                if(!error) {
-                    showToast("BERHASIL HAPUS BAHAN 🗑️");
-                    muatDaftarBahan();
-                }
+                if(!error) { showToast("BERHASIL HAPUS BAHAN 🗑️"); muatDaftarBahan(); }
             }
         }
     </script>
