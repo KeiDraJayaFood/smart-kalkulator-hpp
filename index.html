@@ -9,18 +9,18 @@
     <style>
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        /* Memastikan input terasa ringan dan bersih seperti desain awal */
-        input::placeholder { color: #a0aec0; font-size: 0.875rem; }
+        /* Animasi untuk Popup Notifikasi */
+        .toast-animate { animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     </style>
 </head>
 <body class="bg-gray-100">
     <div id="app" class="max-w-md mx-auto bg-white min-h-screen shadow-lg relative">
-        <!-- HEADER IDENTIK DENGAN SCREENSHOT -->
         <header class="bg-[#2563eb] p-4 text-white text-center font-bold text-lg tracking-wide shadow-sm">
             SMART KALKULATOR HPP
         </header>
 
-        <!-- SECTION LOGIN -->
+        <!-- LOGIN SECTION -->
         <div id="login-section" class="p-6">
             <input type="email" id="email" placeholder="Email" class="w-full p-2.5 border rounded-md mb-3 text-sm focus:outline-none focus:border-blue-500">
             <input type="password" id="password" placeholder="Password" class="w-full p-2.5 border rounded-md mb-4 text-sm focus:outline-none focus:border-blue-500">
@@ -30,25 +30,23 @@
             </div>
         </div>
 
-        <!-- MAIN APP SECTION -->
+        <!-- MAIN SECTION -->
         <div id="main-section" class="hidden">
-            <!-- TAB NAVIGATION (UKURAN TULISAN SEDANG/PAS) -->
-            <div class="flex border-b text-[11px] font-bold text-gray-500 uppercase tracking-tight">
-                <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-3.5 border-b-2 border-blue-600 text-blue-600">Database Bahan</button>
-                <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-3.5">Kalkulator</button>
-                <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-3.5">Grafik</button>
+            <!-- 1. PERBAIKAN: FONT TAB DIPERBESAR & CAPS LOCK -->
+            <div class="flex border-b font-black text-gray-500 uppercase tracking-tighter">
+                <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-4 border-blue-600 text-blue-600 text-[13px]">DATABASE BAHAN</button>
+                <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-4 text-[13px]">KALKULATOR</button>
+                <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-4 text-[13px]">GRAFIK</button>
             </div>
 
-            <!-- TAB 1: DATABASE BAHAN -->
             <div id="tab-bahan" class="tab-content active p-4">
-                <!-- FORM INPUT (WARNA BIRU MUDA SESUAI SCREENSHOT) -->
                 <div class="bg-[#f3f8ff] p-5 rounded-xl border border-blue-100 mb-6 shadow-sm">
-                    <h3 id="form-title" class="font-bold text-blue-800 mb-4 text-[11px] uppercase tracking-wider">Tambah Bahan Baru</h3>
+                    <!-- 2. PERBAIKAN: UKURAN "TAMBAH BAHAN" DIPERBESAR -->
+                    <h3 id="form-title" class="font-black text-blue-800 mb-4 text-[14px] uppercase tracking-widest">TAMBAH BAHAN BARU</h3>
                     <input type="hidden" id="edit-id">
                     
                     <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="w-full p-2.5 border rounded-md mb-3 text-sm outline-none focus:border-blue-300">
                     
-                    <!-- KATEGORI SESUAI PERMINTAAN: KARBO, PROTEIN, SAYUR, BUMBU, LAIN-LAIN -->
                     <select id="kategori_bahan" class="w-full p-2.5 border rounded-md mb-3 bg-white text-sm text-gray-600 outline-none">
                         <option value="Karbo">Karbo</option>
                         <option value="Protein">Protein</option>
@@ -67,17 +65,17 @@
                         <input type="number" id="wastage" placeholder="Wastage %" class="w-1/2 p-2.5 border rounded-md text-sm outline-none">
                     </div>
 
-                    <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#28a745] text-white p-3.5 rounded-lg font-bold text-base shadow-sm active:scale-95 transition-transform uppercase">Simpan Bahan</button>
+                    <!-- 3. PERBAIKAN: UKURAN "SIMPAN BAHAN" DIPERKECIL SEDIKIT -->
+                    <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#28a745] text-white p-3 rounded-lg font-bold text-sm shadow-sm active:scale-95 transition-transform uppercase">Simpan Bahan</button>
                     <button id="btn-batal" onclick="resetForm()" class="hidden w-full bg-gray-400 text-white p-2 rounded-md mt-2 text-xs font-bold uppercase">Batal</button>
                 </div>
                 
                 <h3 class="font-bold text-gray-500 mb-4 text-[11px] uppercase tracking-widest">Daftar Bahan Anda</h3>
-                <div id="list-bahan" class="space-y-3">
-                    <!-- Data dari Supabase -->
+                <div id="list-bahan" class="space-y-3 pb-20">
+                    <!-- Data List -->
                 </div>
             </div>
 
-            <!-- TAB 2 & 3 -->
             <div id="tab-kalkulator" class="tab-content p-10 text-center text-gray-400 text-sm italic">Fitur Kalkulator segera hadir.</div>
             <div id="tab-grafik" class="tab-content p-10 text-center text-gray-400 text-sm italic">Fitur Grafik segera hadir.</div>
 
@@ -85,127 +83,66 @@
         </div>
     </div>
 
-    <script>
-        // GANTI DENGAN DATA ANDA
-        const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
-        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
+    <!-- Container untuk Popup Notifikasi -->
+    <div id="toast-container"></div>
 
-        // Inisialisasi Client
+    <script>
+        const SUPABASE_URL = "URL_ANDA";
+        const SUPABASE_KEY = "KEY_ANDA";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // FUNGSI LOGIN
+        // 4. PERBAIKAN: FUNGSI POPUP NOTIFIKASI
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-10 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-6 py-3 rounded-full shadow-2xl font-bold text-xs z-50 toast-animate`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => { toast.remove(); }, 3000);
+        }
+
         async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                alert("Email dan Password tidak boleh kosong!");
-                return;
-            }
-
-            try {
-                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-                
-                if (error) {
-                    alert("Gagal Login: " + error.message);
-                    console.error("Auth Error:", error);
-                } else {
-                    console.log("Login Berhasil:", data);
-                    location.reload(); 
-                }
-            } catch (err) {
-                alert("Terjadi kesalahan sistem. Pastikan URL Supabase benar.");
-                console.error("System Error:", err);
-            }
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) alert("Email/Password Salah!");
+            else location.reload();
         }
 
-        // FUNGSI DAFTAR
         async function handleSignUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            
-            if (!email || !password) {
-                alert("Isi data untuk mendaftar!");
-                return;
-            }
-
-            const { data, error } = await supabaseClient.auth.signUp({ email, password });
-            
-            if (error) {
-                alert("Daftar Gagal: " + error.message);
-            } else {
-                alert("Pendaftaran berhasil! Silakan cek email untuk konfirmasi atau coba login.");
-            }
+            const { error } = await supabaseClient.auth.signUp({ email, password });
+            if (error) alert(error.message);
+            else showToast("Berhasil Daftar! Silakan Login.");
         }
 
-        // FUNGSI LOGOUT
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             location.reload();
         }
 
-        // CEK SESI SAAT HALAMAN DIBUKA
-        window.addEventListener('load', async () => {
-            const { data: { session }, error } = await supabaseClient.auth.getSession();
-            
-            if (error) {
-                console.error("Session Error:", error);
-                return;
-            }
-
+        window.onload = async () => {
+            const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('main-section').classList.remove('hidden');
                 muatDaftarBahan();
             }
-        });
+        };
 
-        // NAVIGASI TAB
         function openTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
             document.querySelectorAll('#main-section button').forEach(b => {
                 if(b.id && b.id.includes('btn-tab')) {
-                    b.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600');
-                    b.classList.add('text-gray-500');
+                    b.classList.remove('border-b-4', 'border-blue-600', 'text-blue-600');
+                    b.classList.add('text-gray-400');
                 }
             });
             const activeBtn = document.getElementById('btn-' + tabId);
-            if(activeBtn) {
-                activeBtn.classList.add('border-b-2', 'border-blue-600', 'text-blue-600');
-                activeBtn.classList.remove('text-gray-500');
-            }
-        }
-
-        // --- FUNGSI CRUD BAHAN (TETAP SAMA) ---
-        async function muatDaftarBahan() {
-            try {
-                const { data, error } = await supabaseClient.from('bahan_baku').select('*').order('created_at', {ascending: false});
-                const list = document.getElementById('list-bahan');
-                if (error) throw error;
-
-                if (data) {
-                    list.innerHTML = data.map(b => {
-                        const tgl = new Date(b.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-                        return `
-                            <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm flex justify-between items-center">
-                                <div>
-                                    <p class="font-bold text-gray-800 text-base leading-tight">${b.nama_bahan}</p>
-                                    <p class="text-blue-600 font-bold text-sm mt-0.5">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
-                                    <p class="text-[10px] text-gray-400 mt-1.5 font-medium uppercase tracking-tighter">${tgl} WIB | ${b.kategori}</p>
-                                </div>
-                                <div class="flex gap-2">
-                                    <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1.5 rounded-md">EDIT</button>
-                                    <button onclick="hapusBahan(${b.id})" class="border border-red-100 text-red-400 text-[10px] font-bold px-3 py-1.5 rounded-md">HAPUS</button>
-                                </div>
-                            </div>
-                        `;
-                    }).join('');
-                }
-            } catch (err) {
-                console.error("Load Data Error:", err);
-            }
+            activeBtn.classList.add('border-b-4', 'border-blue-600', 'text-blue-600');
+            activeBtn.classList.remove('text-gray-400');
         }
 
         async function simpanBahan() {
@@ -221,11 +158,45 @@
                 wastage: parseFloat(document.getElementById('wastage').value) || 0
             };
 
-            if (id) await supabaseClient.from('bahan_baku').update(payload).eq('id', id);
-            else await supabaseClient.from('bahan_baku').insert([payload]);
+            if(!payload.nama_bahan) return alert("Nama Bahan harus diisi!");
 
-            resetForm();
-            muatDaftarBahan();
+            let res;
+            if (id) {
+                res = await supabaseClient.from('bahan_baku').update(payload).eq('id', id);
+                if (!res.error) showToast("BERHASIL UPDATE BAHAN ✅");
+            } else {
+                res = await supabaseClient.from('bahan_baku').insert([payload]);
+                if (!res.error) showToast("BERHASIL SIMPAN BAHAN ✅");
+            }
+
+            if (res.error) alert(res.error.message);
+            else {
+                resetForm();
+                muatDaftarBahan();
+            }
+        }
+
+        async function muatDaftarBahan() {
+            const { data } = await supabaseClient.from('bahan_baku').select('*').order('created_at', {ascending: false});
+            const list = document.getElementById('list-bahan');
+            if (data) {
+                list.innerHTML = data.map(b => {
+                    const tgl = new Date(b.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+                    return `
+                        <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-gray-800 text-base leading-tight">${b.nama_bahan}</p>
+                                <p class="text-blue-600 font-bold text-sm mt-0.5">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
+                                <p class="text-[10px] text-gray-400 mt-1.5 font-medium uppercase tracking-tighter">${tgl} WIB | ${b.kategori}</p>
+                            </div>
+                            <div class="flex gap-2">
+                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1.5 rounded-md hover:bg-gray-50">EDIT</button>
+                                <button onclick="hapusBahan(${b.id})" class="border border-red-100 text-red-400 text-[10px] font-bold px-3 py-1.5 rounded-md hover:bg-red-50">HAPUS</button>
+                            </div>
+                        </div>
+                    `;
+                }).join('');
+            }
         }
 
         function siapkanEdit(b) {
@@ -237,7 +208,7 @@
             document.getElementById('isi_kemasan').value = b.isi_kemasan;
             document.getElementById('satuan_bahan').value = b.satuan;
             document.getElementById('wastage').value = b.wastage;
-            document.getElementById('btn-simpan').innerText = "UPDATE DATA";
+            document.getElementById('btn-simpan').innerText = "UPDATE SEKARANG";
             document.getElementById('btn-batal').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -256,8 +227,11 @@
 
         async function hapusBahan(id) {
             if(confirm("Hapus bahan ini?")) {
-                await supabaseClient.from('bahan_baku').delete().eq('id', id);
-                muatDaftarBahan();
+                const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', id);
+                if(!error) {
+                    showToast("BERHASIL HAPUS BAHAN 🗑️");
+                    muatDaftarBahan();
+                }
             }
         }
     </script>
