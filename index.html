@@ -89,49 +89,123 @@
         // GANTI DENGAN DATA ANDA
         const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
+
+        // Inisialisasi Client
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+        // FUNGSI LOGIN
         async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) alert(error.message);
-            else location.reload();
+            
+            if (!email || !password) {
+                alert("Email dan Password tidak boleh kosong!");
+                return;
+            }
+
+            try {
+                const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+                
+                if (error) {
+                    alert("Gagal Login: " + error.message);
+                    console.error("Auth Error:", error);
+                } else {
+                    console.log("Login Berhasil:", data);
+                    location.reload(); 
+                }
+            } catch (err) {
+                alert("Terjadi kesalahan sistem. Pastikan URL Supabase benar.");
+                console.error("System Error:", err);
+            }
         }
 
+        // FUNGSI DAFTAR
         async function handleSignUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const { error } = await supabaseClient.auth.signUp({ email, password });
-            if (error) alert("Cek email konfirmasi Anda.");
-            else alert("Pendaftaran berhasil, silakan login.");
+            
+            if (!email || !password) {
+                alert("Isi data untuk mendaftar!");
+                return;
+            }
+
+            const { data, error } = await supabaseClient.auth.signUp({ email, password });
+            
+            if (error) {
+                alert("Daftar Gagal: " + error.message);
+            } else {
+                alert("Pendaftaran berhasil! Silakan cek email untuk konfirmasi atau coba login.");
+            }
         }
 
+        // FUNGSI LOGOUT
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             location.reload();
         }
 
-        window.onload = async () => {
-            const { data: { session } } = await supabaseClient.auth.getSession();
+        // CEK SESI SAAT HALAMAN DIBUKA
+        window.addEventListener('load', async () => {
+            const { data: { session }, error } = await supabaseClient.auth.getSession();
+            
+            if (error) {
+                console.error("Session Error:", error);
+                return;
+            }
+
             if (session) {
                 document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('main-section').classList.remove('hidden');
                 muatDaftarBahan();
             }
-        };
+        });
 
+        // NAVIGASI TAB
         function openTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
+            
             document.querySelectorAll('#main-section button').forEach(b => {
-                if(b.id.includes('btn-tab')) {
+                if(b.id && b.id.includes('btn-tab')) {
                     b.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600');
                     b.classList.add('text-gray-500');
                 }
             });
-            document.getElementById('btn-' + tabId).classList.add('border-b-2', 'border-blue-600', 'text-blue-600');
-            document.getElementById('btn-' + tabId).classList.remove('text-gray-500');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            if(activeBtn) {
+                activeBtn.classList.add('border-b-2', 'border-blue-600', 'text-blue-600');
+                activeBtn.classList.remove('text-gray-500');
+            }
+        }
+
+        // --- FUNGSI CRUD BAHAN (TETAP SAMA) ---
+        async function muatDaftarBahan() {
+            try {
+                const { data, error } = await supabaseClient.from('bahan_baku').select('*').order('created_at', {ascending: false});
+                const list = document.getElementById('list-bahan');
+                if (error) throw error;
+
+                if (data) {
+                    list.innerHTML = data.map(b => {
+                        const tgl = new Date(b.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
+                        return `
+                            <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm flex justify-between items-center">
+                                <div>
+                                    <p class="font-bold text-gray-800 text-base leading-tight">${b.nama_bahan}</p>
+                                    <p class="text-blue-600 font-bold text-sm mt-0.5">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
+                                    <p class="text-[10px] text-gray-400 mt-1.5 font-medium uppercase tracking-tighter">${tgl} WIB | ${b.kategori}</p>
+                                </div>
+                                <div class="flex gap-2">
+                                    <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1.5 rounded-md">EDIT</button>
+                                    <button onclick="hapusBahan(${b.id})" class="border border-red-100 text-red-400 text-[10px] font-bold px-3 py-1.5 rounded-md">HAPUS</button>
+                                </div>
+                            </div>
+                        `;
+                    }).join('');
+                }
+            } catch (err) {
+                console.error("Load Data Error:", err);
+            }
         }
 
         async function simpanBahan() {
@@ -152,30 +226,6 @@
 
             resetForm();
             muatDaftarBahan();
-        }
-
-        async function muatDaftarBahan() {
-            const { data } = await supabaseClient.from('bahan_baku').select('*').order('created_at', {ascending: false});
-            const list = document.getElementById('list-bahan');
-            if (data) {
-                list.innerHTML = data.map(b => {
-                    // FORMAT TANGGAL JAM WIB
-                    const tgl = new Date(b.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
-                    return `
-                        <div class="p-4 bg-white border border-gray-100 rounded-xl shadow-sm flex justify-between items-center">
-                            <div>
-                                <p class="font-bold text-gray-800 text-base leading-tight">${b.nama_bahan}</p>
-                                <p class="text-blue-600 font-bold text-sm mt-0.5">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
-                                <p class="text-[10px] text-gray-400 mt-1.5 font-medium uppercase tracking-tighter">${tgl} WIB | ${b.kategori}</p>
-                            </div>
-                            <div class="flex gap-2">
-                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-gray-200 text-gray-500 text-[10px] font-bold px-3 py-1.5 rounded-md hover:bg-gray-50">EDIT</button>
-                                <button onclick="hapusBahan(${b.id})" class="border border-red-100 text-red-400 text-[10px] font-bold px-3 py-1.5 rounded-md hover:bg-red-50">HAPUS</button>
-                            </div>
-                        </div>
-                    `;
-                }).join('');
-            }
         }
 
         function siapkanEdit(b) {
