@@ -221,6 +221,24 @@
                 muatDaftarBahan();
             }
         }
+        let keranjangBahan = [];
+
+        // Fungsi ini dipanggil setiap kali tab kalkulator dibuka
+        async function muatOpsiBahan() {
+            const { data } = await supabaseClient.from('bahan_baku').select('*');
+            const select = document.getElementById('pilih_bahan_kalkulator');
+            if (data) {
+                select.innerHTML = data.map(b => `<option value="${b.id}">${b.nama_bahan} (${b.satuan})</option>`).join('');
+            }
+        }
+
+        // Jalankan muatOpsiBahan saat pindah ke tab kalkulator
+        const originalOpenTab = openTab;
+        openTab = function(tabId) {
+            originalOpenTab(tabId);
+            if(tabId === 'tab-kalkulator') muatOpsiBahan();
+        };
+        
     </script>
 </body>
 </html>
