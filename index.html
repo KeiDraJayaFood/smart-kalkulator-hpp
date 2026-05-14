@@ -68,7 +68,38 @@
             </div>
 
             <div id="tab-kalkulator" class="tab-content p-4">
-                <p class="text-center text-gray-500 italic mt-10">Fitur Kalkulator dalam tahap pengembangan...</p>
+                <div id="tab-kalkulator" class="tab-content p-4">
+                <div class="bg-orange-50 p-3 rounded-lg border border-orange-200 mb-4">
+                    <h3 class="font-bold text-orange-800 mb-2 text-sm uppercase">Buat Resep Baru</h3>
+                    <input type="text" id="nama_resep" placeholder="Nama Menu (Contoh: Ayam Goreng)" class="w-full p-2 border rounded text-sm mb-2">
+                    
+                    <div class="bg-white p-2 rounded border mb-2">
+                        <p class="text-[10px] font-bold text-gray-500 mb-1">PILIH BAHAN DARI DATABASE:</p>
+                        <select id="pilih_bahan_kalkulator" class="w-full p-2 border rounded text-sm mb-2">
+                            <!-- Daftar bahan dari database akan muncul di sini otomatis -->
+                        </select>
+                        <div class="flex gap-2">
+                            <input type="number" id="berat_pakai" placeholder="Berat yang digunakan" class="w-2/3 p-2 border rounded text-sm">
+                            <button onclick="tambahBahanKeResep()" class="w-1/3 bg-orange-600 text-white text-[10px] font-bold rounded">TAMBAH</button>
+                        </div>
+                    </div>
+
+                    <div id="list-bahan-resep" class="space-y-1 mb-3">
+                        <!-- List bahan yang sedang dihitung akan muncul di sini -->
+                    </div>
+
+                    <div class="border-t pt-2 mt-2">
+                        <div class="flex justify-between font-bold text-lg">
+                            <span>TOTAL HPP:</span>
+                            <span id="total-hpp-display">Rp 0</span>
+                        </div>
+                        <button onclick="simpanResepFinal()" class="w-full bg-blue-700 text-white p-3 rounded font-bold mt-3 shadow-lg">SIMPAN RESEP & HARGA</button>
+                    </div>
+                </div>
+                
+                <h3 class="font-bold mb-2 text-sm uppercase text-gray-700">Daftar Resep Jadi</h3>
+                <div id="list-resep-jadi" class="space-y-2 text-xs"></div>
+            </div>
             </div>
 
             <div id="tab-grafik" class="tab-content p-4">
