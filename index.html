@@ -9,46 +9,44 @@
     <style>
         .tab-content { display: none; }
         .tab-content.active { display: block; }
-        .toast-animate { animation: slideUp 0.3s ease-out; }
-        @keyframes slideUp { from { transform: translate(-50%, 20px); opacity: 0; } to { transform: translate(-50%, 0); opacity: 1; } }
     </style>
 </head>
-<body class="bg-gray-100 min-h-screen">
-    <div id="app" class="max-w-md mx-auto bg-white min-h-screen shadow-lg relative pb-20">
-        <header class="bg-blue-600 p-5 text-white text-center font-bold text-xl shadow-md uppercase tracking-wider">
+<body class="bg-gray-100">
+    <div id="app" class="max-w-md mx-auto bg-white min-h-screen shadow-lg relative">
+        <!-- HEADER ASLI -->
+        <header class="bg-blue-600 p-5 text-white text-center font-bold text-xl shadow-md">
             SMART KALKULATOR HPP
         </header>
 
-        <!-- SECTION: LOGIN (Tampil Pertama) -->
-        <div id="login-section" class="p-6 pt-12">
-            <h2 class="text-center text-lg font-bold mb-6 text-gray-700 uppercase tracking-widest">Akses Pengguna</h2>
-            <input type="email" id="email" placeholder="Email" class="w-full p-4 border rounded-xl mb-4 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
-            <input type="password" id="password" placeholder="Password" class="w-full p-4 border rounded-xl mb-6 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
-            <div class="flex gap-3">
-                <button onclick="handleLogin()" class="w-1/2 bg-blue-600 text-white p-4 rounded-xl font-bold shadow-lg active:scale-95 transition-transform">LOGIN</button>
-                <button onclick="handleSignUp()" class="w-1/2 bg-gray-200 text-gray-700 p-4 rounded-xl font-bold text-sm">DAFTAR</button>
+        <!-- LOGIN SECTION (Tampilan Awal) -->
+        <div id="login-section" class="p-6">
+            <input type="email" id="email" placeholder="Email" class="w-full p-3 border rounded-lg mb-3">
+            <input type="password" id="password" placeholder="Password" class="w-full p-3 border rounded-lg mb-3">
+            <div class="flex gap-2">
+                <button onclick="handleLogin()" class="w-1/2 bg-blue-600 text-white p-3 rounded-lg font-bold">LOGIN</button>
+                <button onclick="handleSignUp()" class="w-1/2 bg-gray-200 text-gray-700 p-3 rounded-lg font-bold">DAFTAR</button>
             </div>
-            <p id="auth-error" class="text-red-500 text-center mt-4 text-xs font-bold"></p>
         </div>
 
-        <!-- SECTION: UTAMA (Tersembunyi sampai login berhasil) -->
+        <!-- MAIN SECTION -->
         <div id="main-section" class="hidden">
-            <!-- TAB NAVIGATION -->
-            <div class="flex border-b text-[12px] font-bold bg-white sticky top-0 z-10 shadow-sm">
-                <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-4 border-blue-600 text-blue-600 uppercase">Database Bahan</button>
-                <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-4 text-gray-400 uppercase">Kalkulator</button>
-                <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-4 text-gray-400 uppercase">Grafik</button>
+            <!-- TAB MENU (UKURAN SESUAI SCREENSHOT) -->
+            <div class="flex border-b text-xs font-bold text-gray-500 uppercase">
+                <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-2 border-blue-600 text-blue-600">Database Bahan</button>
+                <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-4">Kalkulator</button>
+                <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-4">Grafik</button>
             </div>
 
             <!-- TAB 1: DATABASE BAHAN -->
             <div id="tab-bahan" class="tab-content active p-4">
-                <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 mb-6 shadow-sm">
-                    <h3 id="form-title" class="font-bold text-blue-700 mb-4 text-[10px] uppercase tracking-widest">Tambah Bahan Baru</h3>
+                <!-- FORM TAMBAH BAHAN (SESUAI SCREENSHOT) -->
+                <div class="bg-[#f0f7ff] p-4 rounded-xl border border-blue-100 mb-6">
+                    <h3 id="form-title" class="font-bold text-blue-800 mb-4 text-sm uppercase">Tambah Bahan Baru</h3>
                     <input type="hidden" id="edit-id">
+                    <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="w-full p-3 border rounded-lg mb-3">
                     
-                    <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="w-full p-3 border rounded-xl mb-3 shadow-sm text-sm outline-none">
-                    
-                    <select id="kategori_bahan" class="w-full p-3 border rounded-xl mb-3 shadow-sm text-sm bg-white cursor-pointer outline-none">
+                    <!-- KATEGORI YANG TADI HILANG -->
+                    <select id="kategori_bahan" class="w-full p-3 border rounded-lg mb-3 bg-white text-gray-500 text-sm">
                         <option value="Bahan Pokok">Bahan Pokok</option>
                         <option value="Protein">Protein</option>
                         <option value="Bumbu">Bumbu</option>
@@ -57,67 +55,49 @@
                     </select>
 
                     <div class="flex gap-2 mb-3">
-                        <input type="number" id="harga_beli" placeholder="Harga Beli" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
-                        <input type="number" id="isi_kemasan" placeholder="Isi / Berat" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
+                        <input type="number" id="harga_beli" placeholder="Harga Beli" class="w-1/2 p-3 border rounded-lg">
+                        <input type="number" id="isi_kemasan" placeholder="Isi/Berat" class="w-1/2 p-3 border rounded-lg">
                     </div>
-                    
-                    <div class="flex gap-2 mb-5">
-                        <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml)" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
-                        <input type="number" id="wastage" placeholder="Wastage %" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
+                    <div class="flex gap-2 mb-4">
+                        <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml)" class="w-1/2 p-3 border rounded-lg text-sm">
+                        <input type="number" id="wastage" placeholder="Wastage %" class="w-1/2 p-3 border rounded-lg text-sm">
                     </div>
-
-                    <div class="flex gap-2">
-                        <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold shadow-lg uppercase tracking-wider active:scale-95 transition-transform">Simpan Bahan</button>
-                        <button id="btn-batal" onclick="resetForm()" class="hidden w-1/3 bg-gray-400 text-white p-4 rounded-xl font-bold text-xs uppercase">Batal</button>
-                    </div>
+                    <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#22a447] text-white p-4 rounded-xl font-black text-lg shadow-md">SIMPAN BAHAN</button>
+                    <button id="btn-batal" onclick="resetForm()" class="hidden w-full bg-gray-400 text-white p-2 rounded-lg mt-2 font-bold">BATAL</button>
                 </div>
-                
-                <h3 class="font-bold text-gray-500 mb-4 text-[11px] uppercase tracking-widest flex items-center">
-                    <span class="w-1 h-3 bg-blue-600 mr-2 rounded-full"></span> Daftar Bahan Anda
-                </h3>
-                <div id="list-bahan" class="space-y-4 pb-10">
-                    <!-- Data List -->
+
+                <h3 class="font-bold text-gray-600 mb-4 text-sm uppercase">Daftar Bahan Anda</h3>
+                <div id="list-bahan" class="space-y-3">
+                    <!-- List data akan muncul di sini -->
                 </div>
             </div>
 
-            <!-- TAB LAIN -->
-            <div id="tab-kalkulator" class="tab-content p-10 text-center text-gray-400 italic text-sm">Fitur Kalkulator akan kita perbaiki setelah Database Bahan ini mantap.</div>
-            <div id="tab-grafik" class="tab-content p-10 text-center text-gray-400 italic text-sm">Fitur Grafik segera hadir.</div>
+            <!-- TAB 2 & 3 -->
+            <div id="tab-kalkulator" class="tab-content p-10 text-center">Fitur Kalkulator segera hadir.</div>
+            <div id="tab-grafik" class="tab-content p-10 text-center">Fitur Grafik segera hadir.</div>
 
-            <button onclick="handleLogout()" class="w-full text-red-400 text-[10px] mt-10 mb-10 font-bold underline uppercase tracking-tighter">Keluar / Logout</button>
+            <button onclick="handleLogout()" class="w-full text-gray-400 text-[10px] mt-10 mb-10 underline">Logout</button>
         </div>
     </div>
 
-    <div id="toast-container"></div>
-
     <script>
-        // MASUKKAN DATA ANDA DISINI
-        const SUPABASE_URL = "URL_ANDA";
-        const SUPABASE_KEY = "KEY_ANDA";
+        const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        // FUNGSI AUTH (LOGIN/DAFTAR)
         async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const errorLabel = document.getElementById('auth-error');
-            
-            errorLabel.innerText = "Mengecek...";
-            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            
-            if (error) {
-                errorLabel.innerText = "Gagal: " + error.message;
-            } else {
-                location.reload(); // Refresh untuk masuk ke dashboard
-            }
+            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            if (error) alert(error.message);
+            else location.reload();
         }
 
         async function handleSignUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const { error } = await supabaseClient.auth.signUp({ email, password });
-            if (error) alert(error.message);
-            else showToast("Pendaftaran Berhasil! Silakan Cek Email atau Login.");
+            if (error) alert("Cek email Anda untuk konfirmasi pendaftaran.");
         }
 
         async function handleLogout() {
@@ -125,33 +105,24 @@
             location.reload();
         }
 
-        // CEK STATUS SAAT BUKA HALAMAN
         window.onload = async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                document.getElementById('login-section').style.display = 'none';
+                document.getElementById('login-section').classList.add('hidden');
                 document.getElementById('main-section').classList.remove('hidden');
                 muatDaftarBahan();
             }
         };
 
-        // NAVIGASI TAB
         function openTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            
             document.querySelectorAll('#main-section button').forEach(b => {
-                if(b.id.startsWith('btn-tab-')) {
-                    b.classList.remove('border-b-4', 'border-blue-600', 'text-blue-600');
-                    b.classList.add('text-gray-400');
-                }
+                b.classList.remove('border-b-2', 'border-blue-600', 'text-blue-600');
             });
-            const activeBtn = document.getElementById('btn-' + tabId);
-            activeBtn.classList.add('border-b-4', 'border-blue-600', 'text-blue-600');
-            activeBtn.classList.remove('text-gray-400');
+            document.getElementById('btn-' + tabId).classList.add('border-b-2', 'border-blue-600', 'text-blue-600');
         }
 
-        // CRUD BAHAN
         async function simpanBahan() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             const id = document.getElementById('edit-id').value;
@@ -165,15 +136,12 @@
                 wastage: parseFloat(document.getElementById('wastage').value) || 0
             };
 
-            if(!payload.nama_bahan || !payload.harga_beli) return showToast("Nama & Harga wajib diisi!");
-
             let res;
             if (id) res = await supabaseClient.from('bahan_baku').update(payload).eq('id', id);
             else res = await supabaseClient.from('bahan_baku').insert([payload]);
 
             if (res.error) alert(res.error.message);
             else {
-                showToast(id ? "Update Berhasil ✅" : "Tersimpan ✅");
                 resetForm();
                 muatDaftarBahan();
             }
@@ -184,17 +152,18 @@
             const list = document.getElementById('list-bahan');
             if (data) {
                 list.innerHTML = data.map(b => {
+                    // FORMAT TANGGAL JAM WIB YANG TADI HILANG
                     const tgl = new Date(b.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
                     return `
-                        <div class="p-4 bg-white border border-gray-100 rounded-2xl shadow-sm flex justify-between items-center active:bg-gray-50 transition-colors">
-                            <div class="flex-1">
-                                <p class="font-bold text-gray-800 text-lg mb-0.5 leading-tight">${b.nama_bahan}</p>
-                                <p class="text-blue-600 font-bold text-[15px] mb-2">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
-                                <p class="text-[10px] text-gray-400 font-medium uppercase tracking-tighter italic">${tgl} WIB • <span class="text-blue-400">${b.kategori}</span></p>
+                        <div class="p-4 bg-white border rounded-xl shadow-sm flex justify-between items-center">
+                            <div>
+                                <p class="font-bold text-gray-800 text-lg">${b.nama_bahan}</p>
+                                <p class="text-blue-600 font-bold text-sm">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
+                                <p class="text-[10px] text-gray-400 mt-1">${tgl} WIB | ${b.kategori}</p>
                             </div>
-                            <div class="flex flex-col gap-2 ml-4">
-                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="bg-white border-2 border-blue-500 text-blue-500 font-bold text-[10px] px-4 py-2 rounded-xl">EDIT</button>
-                                <button onclick="hapusBahan(${b.id})" class="bg-white border-2 border-red-500 text-red-500 font-bold text-[10px] px-4 py-2 rounded-xl">HAPUS</button>
+                            <div class="flex gap-2">
+                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="border border-blue-500 text-blue-500 text-[10px] font-bold px-3 py-1 rounded">EDIT</button>
+                                <button onclick="hapusBahan(${b.id})" class="border border-red-500 text-red-500 text-[10px] font-bold px-3 py-1 rounded">HAPUS</button>
                             </div>
                         </div>
                     `;
@@ -203,7 +172,7 @@
         }
 
         function siapkanEdit(b) {
-            document.getElementById('form-title').innerText = "EDIT DATA BAHAN";
+            document.getElementById('form-title').innerText = "EDIT BAHAN";
             document.getElementById('edit-id').value = b.id;
             document.getElementById('nama_bahan').value = b.nama_bahan;
             document.getElementById('kategori_bahan').value = b.kategori;
@@ -211,7 +180,7 @@
             document.getElementById('isi_kemasan').value = b.isi_kemasan;
             document.getElementById('satuan_bahan').value = b.satuan;
             document.getElementById('wastage').value = b.wastage;
-            document.getElementById('btn-simpan').innerText = "UPDATE SEKARANG";
+            document.getElementById('btn-simpan').innerText = "UPDATE BAHAN";
             document.getElementById('btn-batal').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -229,20 +198,10 @@
         }
 
         async function hapusBahan(id) {
-            if(confirm("Hapus bahan ini secara permanen?")) {
+            if(confirm("Hapus?")) {
                 await supabaseClient.from('bahan_baku').delete().eq('id', id);
-                showToast("Dihapus 🗑️");
                 muatDaftarBahan();
             }
-        }
-
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-8 py-3 rounded-full shadow-2xl font-bold text-xs z-50 toast-animate`;
-            toast.innerText = message;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
         }
     </script>
 </body>
