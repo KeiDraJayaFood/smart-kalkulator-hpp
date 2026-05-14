@@ -7,163 +7,141 @@
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
-        body { font-family: 'Inter', sans-serif; }
         .tab-content { display: none; }
         .tab-content.active { display: block; }
         
-        /* Notifikasi Toast */
-        .toast-notification {
+        /* Notifikasi Bulat Lonjong Sesuai Screenshot 01.03.28 */
+        .toast-custom {
             position: fixed;
-            bottom: 80px;
-            right: 0;
+            bottom: 120px;
+            right: -10px; /* Sedikit keluar layar agar terlihat seperti di foto */
+            background: #1db15d;
             color: white;
-            padding: 12px 25px;
-            border-radius: 50px 0 0 50px;
+            padding: 20px 40px 20px 25px;
+            border-radius: 60px 0 0 60px;
             font-weight: bold;
-            font-size: 13px;
-            box-shadow: -5px 5px 15px rgba(0,0,0,0.15);
-            z-index: 2000;
-            animation: slideInRight 0.3s ease-out;
+            font-size: 14px;
+            z-index: 9999;
+            box-shadow: -5px 5px 15px rgba(0,0,0,0.1);
+            animation: slideIn 0.3s ease-out;
+            line-height: 1.2;
+            text-align: left;
         }
 
-        /* Animasi Modal Modern */
-        #modal-hapus {
-            transition: all 0.3s ease;
-            backdrop-filter: blur(4px);
-        }
-        .modal-content {
-            animation: zoomIn 0.2s ease-out;
-        }
-
-        @keyframes slideInRight {
+        @keyframes slideIn {
             from { transform: translateX(100%); }
             to { transform: translateX(0); }
         }
-        @keyframes zoomIn {
-            from { transform: scale(0.9); opacity: 0; }
-            to { transform: scale(1); opacity: 1; }
+
+        /* Modal Konfirmasi Elegant */
+        #modal-hapus-container {
+            backdrop-filter: blur(2px);
+            background: rgba(0,0,0,0.4);
         }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen">
     <div id="app" class="max-w-md mx-auto bg-white min-h-screen shadow-lg relative pb-20">
-        <header class="bg-blue-600 p-4 text-white text-center font-bold text-xl shadow-md uppercase">
+        <header class="bg-[#2563eb] p-4 text-white text-center font-bold text-xl uppercase tracking-wider shadow-sm">
             SMART KALKULATOR HPP
         </header>
 
-        <!-- MAIN SECTION -->
-        <div id="main-section" class="p-0">
-            <div class="flex border-b text-[11px] font-bold">
-                <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-2 border-blue-600 text-blue-600 uppercase">Database Bahan</button>
-                <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-4 text-gray-400 uppercase">Kalkulator</button>
-                <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-4 text-gray-400 uppercase">Grafik</button>
+        <!-- TABS -->
+        <div class="flex border-b text-[11px] font-bold text-gray-400">
+            <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-2 border-blue-600 text-blue-600 uppercase">Database Bahan</button>
+            <button class="w-1/3 py-4 uppercase">Kalkulator</button>
+            <button class="w-1/3 py-4 uppercase">Grafik</button>
+        </div>
+
+        <div id="tab-bahan" class="p-4">
+            <!-- FORM (Sesuai Desain Screenshot) -->
+            <div class="bg-white p-5 rounded-xl border border-blue-100 mb-6 shadow-sm">
+                <h3 id="form-title" class="font-bold text-blue-800 mb-4 text-sm uppercase tracking-wide">TAMBAH BAHAN BARU</h3>
+                <input type="hidden" id="edit-id">
+                <div class="grid grid-cols-1 gap-3">
+                    <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="p-3 border border-gray-200 rounded-lg text-sm outline-none focus:border-blue-400">
+                    <select id="kategori_bahan" class="p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 outline-none">
+                        <option value="Karbo">Karbo</option>
+                        <option value="Protein">Protein</option>
+                        <option value="Sayur">Sayur</option>
+                        <option value="Bumbu">Bumbu</option>
+                        <option value="Lain-lain">Lain-lain</option>
+                    </select>
+                    <div class="flex gap-2">
+                        <input type="number" id="harga_beli" placeholder="Harga Beli (Rp)" class="w-1/2 p-3 border border-gray-200 rounded-lg text-sm outline-none">
+                        <input type="number" id="isi_kemasan" placeholder="Isi Kemasan" class="w-1/2 p-3 border border-gray-200 rounded-lg text-sm outline-none">
+                    </div>
+                    <div class="flex gap-2">
+                        <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml/pcs)" class="w-1/2 p-3 border border-gray-200 rounded-lg text-sm outline-none">
+                        <input type="number" id="wastage" placeholder="Wastage (%)" class="w-1/2 p-3 border border-gray-200 rounded-lg text-sm outline-none">
+                    </div>
+                    <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#1db15d] text-white p-3 rounded-lg font-bold shadow hover:bg-green-600 transition-all uppercase text-sm">SIMPAN BAHAN</button>
+                    <button id="btn-batal" onclick="resetForm()" class="hidden w-full bg-gray-400 text-white p-2 rounded-lg font-bold text-[10px] uppercase">Batal Edit</button>
+                </div>
             </div>
 
-            <div id="tab-bahan" class="tab-content active p-4">
-                <!-- FORM TAMBAH -->
-                <div class="bg-blue-50/50 p-4 rounded-xl border border-blue-100 mb-6 shadow-sm">
-                    <h3 id="form-title" class="font-bold text-blue-800 mb-4 text-xs uppercase tracking-wider">Tambah Bahan Baru</h3>
-                    <input type="hidden" id="edit-id">
-                    <div class="grid grid-cols-1 gap-3">
-                        <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="p-3 border rounded-lg text-sm outline-none focus:ring-2 focus:ring-blue-300 transition-all">
-                        <select id="kategori_bahan" class="p-3 border rounded-lg text-sm bg-white outline-none">
-                            <option value="Karbo">Karbo</option>
-                            <option value="Protein">Protein</option>
-                            <option value="Sayur">Sayur</option>
-                            <option value="Bumbu">Bumbu</option>
-                            <option value="Lain-lain">Lain-lain</option>
-                        </select>
-                        <div class="flex gap-2">
-                            <input type="number" id="harga_beli" placeholder="Harga Beli (Rp)" class="w-1/2 p-3 border rounded-lg text-sm outline-none">
-                            <input type="number" id="isi_kemasan" placeholder="Isi Kemasan" class="w-1/2 p-3 border rounded-lg text-sm outline-none">
-                        </div>
-                        <div class="flex gap-2">
-                            <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml/pcs)" class="w-1/2 p-3 border rounded-lg text-sm outline-none">
-                            <input type="number" id="wastage" placeholder="Wastage (%)" class="w-1/2 p-3 border rounded-lg text-sm outline-none">
-                        </div>
-                        <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-[#1db15d] text-white p-3 rounded-lg font-bold shadow-md hover:bg-green-700 transition-all uppercase text-sm active:scale-95">Simpan Bahan</button>
-                        <button id="btn-batal" onclick="resetForm()" class="hidden w-full bg-gray-400 text-white p-2 rounded-lg font-bold text-[10px] uppercase">Batal Edit</button>
-                    </div>
-                </div>
-                
-                <h3 class="font-bold mb-3 text-gray-700 text-sm uppercase">Daftar Bahan</h3>
-                <div id="list-bahan" class="space-y-3 pb-10"></div>
-            </div>
+            <h3 class="font-bold mb-3 text-gray-600 text-sm uppercase">DAFTAR BAHAN</h3>
+            <div id="list-bahan" class="space-y-3"></div>
         </div>
     </div>
 
-    <!-- MODAL HAPUS MODERN (MENGGANTI POPUP MONOTON) -->
-    <div id="modal-hapus" class="hidden fixed inset-0 bg-black/60 z-[5000] flex items-center justify-center p-6">
-        <div class="modal-content bg-white rounded-3xl w-full max-w-xs overflow-hidden shadow-2xl transition-all">
-            <!-- Bagian Atas (Visual) -->
-            <div class="bg-red-50 p-8 text-center">
-                <div class="inline-flex items-center justify-center w-16 h-16 bg-red-100 text-red-500 rounded-full mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                    </svg>
-                </div>
-                <h3 class="font-bold text-gray-800 text-xl tracking-tight">Hapus Bahan?</h3>
-                <p class="text-gray-500 text-sm mt-2 leading-relaxed px-2">Data "<span id="nama-bahan-hapus" class="font-semibold text-gray-700"></span>" akan dihapus permanen dari database Anda.</p>
-            </div>
-            
-            <!-- Bagian Bawah (Tombol) -->
-            <div class="p-4 flex gap-3 bg-gray-50/50">
-                <button onclick="closeModalHapus()" class="w-1/2 py-4 rounded-2xl font-bold text-gray-400 bg-white border border-gray-100 hover:bg-gray-100 transition-all uppercase text-xs">Batal</button>
-                <button id="confirm-delete-btn" class="w-1/2 py-4 rounded-2xl font-bold text-white bg-red-500 hover:bg-red-600 shadow-lg shadow-red-200 transition-all uppercase text-xs active:scale-95">Ya, Hapus</button>
+    <!-- MODAL HAPUS ELEGANT -->
+    <div id="modal-hapus-container" class="hidden fixed inset-0 z-[999] flex items-center justify-center p-6">
+        <div class="bg-white rounded-2xl w-full max-w-xs p-6 shadow-2xl">
+            <h3 class="font-bold text-gray-800 text-lg mb-2">Hapus Bahan?</h3>
+            <p class="text-gray-500 text-sm mb-6">Data ini akan dihapus secara permanen dari daftar.</p>
+            <div class="flex gap-3">
+                <button onclick="closeModalHapus()" class="w-1/2 py-3 rounded-lg font-bold text-gray-400 bg-gray-100 uppercase text-[10px]">Batal</button>
+                <button id="confirm-delete-btn" class="w-1/2 py-3 rounded-lg font-bold text-white bg-red-500 uppercase text-[10px]">Ya, Hapus</button>
             </div>
         </div>
     </div>
 
     <script>
-        // Gunakan kredensial Anda sebelumnya
         const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         let idHapus = null;
 
-        // Notifikasi Melayang Sesuai Screenshot
-        function showNotification(text, bgColor = "#10b981") {
+        function showNotification(text) {
             const toast = document.createElement("div");
-            toast.className = "toast-notification";
-            toast.style.background = bgColor;
-            toast.innerHTML = `${text} ✅`;
+            toast.className = "toast-custom";
+            toast.innerHTML = text + " ✅";
             document.body.appendChild(toast);
             setTimeout(() => {
                 toast.style.transform = "translateX(100%)";
-                toast.style.transition = "0.5s";
-                setTimeout(() => toast.remove(), 500);
-            }, 3000);
+                toast.style.transition = "0.4s";
+                setTimeout(() => toast.remove(), 400);
+            }, 2500);
         }
 
-        // --- Logika Hapus yang Diperbaiki ---
-        function openModalHapus(id, nama) {
-            idHapus = id;
-            document.getElementById('nama-bahan-hapus').innerText = nama;
-            const modal = document.getElementById('modal-hapus');
-            modal.classList.remove('hidden');
-            modal.classList.add('flex');
-        }
+        async function simpanBahan() {
+            const id = document.getElementById('edit-id').value;
+            const payload = {
+                nama_bahan: document.getElementById('nama_bahan').value,
+                kategori: document.getElementById('kategori_bahan').value,
+                harga_beli: parseFloat(document.getElementById('harga_beli').value),
+                isi_kemasan: parseFloat(document.getElementById('isi_kemasan').value),
+                satuan: document.getElementById('satuan_bahan').value,
+                wastage: parseFloat(document.getElementById('wastage').value) || 0,
+                user_id: (await supabaseClient.auth.getUser()).data.user.id
+            };
 
-        function closeModalHapus() {
-            const modal = document.getElementById('modal-hapus');
-            modal.classList.add('hidden');
-            modal.classList.remove('flex');
-        }
+            if (!payload.nama_bahan) return;
 
-        document.getElementById('confirm-delete-btn').onclick = async () => {
-            if (idHapus) {
-                const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idHapus);
-                if (!error) {
-                    closeModalHapus();
-                    showNotification("BERHASIL HAPUS BAHAN", "#ef4444");
-                    muatDaftarBahan();
-                }
+            let res;
+            if (id) {
+                res = await supabaseClient.from('bahan_baku').update(payload).eq('id', id);
+                if (!res.error) showNotification("BERHASIL UPDATE<br>BAHAN");
+            } else {
+                res = await supabaseClient.from('bahan_baku').insert([payload]);
+                if (!res.error) showNotification("BERHASIL SIMPAN<br>BAHAN");
             }
-        };
 
-        // --- Fungsi Daftar Bahan dengan Nama Kiriman ---
+            if (!res.error) { resetForm(); muatDaftarBahan(); }
+        }
+
         async function muatDaftarBahan() {
             const { data } = await supabaseClient.from('bahan_baku').select('*').order('created_at', { ascending: false });
             const listDiv = document.getElementById('list-bahan');
@@ -173,18 +151,60 @@
                         <div>
                             <p class="font-bold text-gray-800 text-sm">${b.nama_bahan} <span class="font-normal text-gray-400">(${b.kategori})</span></p>
                             <p class="text-blue-600 font-bold text-xs">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
+                            <p class="text-[9px] text-gray-300 mt-1">${new Date(b.created_at).toLocaleDateString('id-ID')}, ${new Date(b.created_at).toLocaleTimeString('id-ID')}</p>
                         </div>
                         <div class="flex gap-2">
-                            <button onclick='siapkanEdit(${JSON.stringify(b)})' class="bg-blue-50 text-blue-600 font-bold px-3 py-2 rounded-lg text-[10px]">EDIT</button>
-                            <button onclick="openModalHapus(${b.id}, '${b.nama_bahan}')" class="text-red-400 font-bold border border-red-50 px-3 py-2 rounded-lg text-[10px] active:bg-red-50">HAPUS</button>
+                            <button onclick='siapkanEdit(${JSON.stringify(b)})' class="bg-[#eff6ff] text-[#2563eb] font-bold px-4 py-2 rounded-lg text-[10px] uppercase">Edit</button>
+                            <button onclick="openModalHapus(${b.id})" class="bg-[#fff1f2] text-[#e11d48] font-bold px-4 py-2 rounded-lg text-[10px] uppercase border border-red-50">Hapus</button>
                         </div>
                     </div>
                 `).join('');
             }
         }
 
-        // [Fungsi simpanBahan, siapkanEdit, resetForm tetap sama seperti sebelumnya]
-        // ... (kode lainnya tetap berfungsi normal)
+        function siapkanEdit(b) {
+            document.getElementById('form-title').innerText = "EDIT BAHAN";
+            document.getElementById('btn-simpan').innerText = "UPDATE DATA";
+            document.getElementById('btn-batal').classList.remove('hidden');
+            document.getElementById('edit-id').value = b.id;
+            document.getElementById('nama_bahan').value = b.nama_bahan;
+            document.getElementById('kategori_bahan').value = b.kategori;
+            document.getElementById('harga_beli').value = b.harga_beli;
+            document.getElementById('isi_kemasan').value = b.isi_kemasan;
+            document.getElementById('satuan_bahan').value = b.satuan;
+            document.getElementById('wastage').value = b.wastage;
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function resetForm() {
+            document.getElementById('form-title').innerText = "TAMBAH BAHAN BARU";
+            document.getElementById('btn-simpan').innerText = "SIMPAN BAHAN";
+            document.getElementById('edit-id').value = "";
+            document.getElementById('btn-batal').classList.add('hidden');
+            document.querySelectorAll('input').forEach(i => i.value = "");
+        }
+
+        function openModalHapus(id) {
+            idHapus = id;
+            document.getElementById('modal-hapus-container').classList.remove('hidden');
+        }
+
+        function closeModalHapus() {
+            document.getElementById('modal-hapus-container').classList.add('hidden');
+        }
+
+        document.getElementById('confirm-delete-btn').onclick = async () => {
+            if (idHapus) {
+                const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idHapus);
+                if (!error) {
+                    closeModalHapus();
+                    showNotification("BERHASIL HAPUS<br>BAHAN");
+                    muatDaftarBahan();
+                }
+            }
+        };
+
+        window.onload = muatDaftarBahan;
     </script>
 </body>
 </html>
