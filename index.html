@@ -80,8 +80,8 @@
     </div>
 
     <script>
-        const SUPABASE_URL = "ISI_URL_SUPABASE_ANDA";
-        const SUPABASE_KEY = "ISI_ANON_KEY_ANDA";
+        const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
+        const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
         // CEK LOGIN SAAT HALAMAN DIBUKA
@@ -151,7 +151,12 @@
             if (error) {
                 alert("Gagal menyimpan: " + error.message);
             } else {
-                alert("Bahan disimpan!");
+                // Ganti alert lama dengan ini agar muncul notifikasi keren di bawah layar
+                const toast = document.createElement("div");
+                toast.className = "fixed bottom-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-xl font-bold text-sm z-50 animate-bounce";
+                toast.innerText = "BERHASIL SIMPAN BAHAN ✅";
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000); // Hilang otomatis dalam 5 detik
                 // Kosongkan form sesuai permintaan
                 document.getElementById('nama_bahan').value = "";
                 document.getElementById('harga_beli').value = "";
