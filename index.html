@@ -19,22 +19,22 @@
             SMART KALKULATOR HPP
         </header>
 
-        <!-- SECTION: LOGIN -->
+        <!-- SECTION: LOGIN (Tampil Pertama) -->
         <div id="login-section" class="p-6 pt-12">
-            <h2 class="text-center text-lg font-bold mb-6 text-gray-700">AKSES PENGGUNA</h2>
-            <input type="email" id="email" placeholder="Email" class="w-full p-4 border rounded-xl mb-4 shadow-sm">
-            <input type="password" id="password" placeholder="Password" class="w-full p-4 border rounded-xl mb-6 shadow-sm">
+            <h2 class="text-center text-lg font-bold mb-6 text-gray-700 uppercase tracking-widest">Akses Pengguna</h2>
+            <input type="email" id="email" placeholder="Email" class="w-full p-4 border rounded-xl mb-4 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
+            <input type="password" id="password" placeholder="Password" class="w-full p-4 border rounded-xl mb-6 shadow-sm focus:ring-2 focus:ring-blue-500 outline-none">
             <div class="flex gap-3">
                 <button onclick="handleLogin()" class="w-1/2 bg-blue-600 text-white p-4 rounded-xl font-bold shadow-lg active:scale-95 transition-transform">LOGIN</button>
-                <button onclick="handleSignUp()" class="w-1/2 bg-gray-200 text-gray-700 p-4 rounded-xl font-bold text-sm">DAFTAR BARU</button>
+                <button onclick="handleSignUp()" class="w-1/2 bg-gray-200 text-gray-700 p-4 rounded-xl font-bold text-sm">DAFTAR</button>
             </div>
-            <p id="auth-msg" class="text-red-500 text-xs mt-4 text-center"></p>
+            <p id="auth-error" class="text-red-500 text-center mt-4 text-xs font-bold"></p>
         </div>
 
-        <!-- SECTION: UTAMA -->
+        <!-- SECTION: UTAMA (Tersembunyi sampai login berhasil) -->
         <div id="main-section" class="hidden">
             <!-- TAB NAVIGATION -->
-            <div class="flex border-b text-[12px] font-bold bg-white sticky top-0 z-10">
+            <div class="flex border-b text-[12px] font-bold bg-white sticky top-0 z-10 shadow-sm">
                 <button onclick="openTab('tab-bahan')" id="btn-tab-bahan" class="w-1/3 py-4 border-b-4 border-blue-600 text-blue-600 uppercase">Database Bahan</button>
                 <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-4 text-gray-400 uppercase">Kalkulator</button>
                 <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-4 text-gray-400 uppercase">Grafik</button>
@@ -43,12 +43,12 @@
             <!-- TAB 1: DATABASE BAHAN -->
             <div id="tab-bahan" class="tab-content active p-4">
                 <div class="bg-blue-50 p-5 rounded-2xl border border-blue-100 mb-6 shadow-sm">
-                    <h3 id="form-title" class="font-bold text-blue-700 mb-4 text-xs uppercase tracking-widest">Tambah Bahan Baru</h3>
+                    <h3 id="form-title" class="font-bold text-blue-700 mb-4 text-[10px] uppercase tracking-widest">Tambah Bahan Baru</h3>
                     <input type="hidden" id="edit-id">
                     
-                    <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="w-full p-3 border rounded-xl mb-3 shadow-sm text-sm">
+                    <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="w-full p-3 border rounded-xl mb-3 shadow-sm text-sm outline-none">
                     
-                    <select id="kategori_bahan" class="w-full p-3 border rounded-xl mb-3 shadow-sm text-sm bg-white cursor-pointer">
+                    <select id="kategori_bahan" class="w-full p-3 border rounded-xl mb-3 shadow-sm text-sm bg-white cursor-pointer outline-none">
                         <option value="Bahan Pokok">Bahan Pokok</option>
                         <option value="Protein">Protein</option>
                         <option value="Bumbu">Bumbu</option>
@@ -57,58 +57,59 @@
                     </select>
 
                     <div class="flex gap-2 mb-3">
-                        <input type="number" id="harga_beli" placeholder="Harga Beli" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm">
-                        <input type="number" id="isi_kemasan" placeholder="Isi / Berat" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm">
+                        <input type="number" id="harga_beli" placeholder="Harga Beli" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
+                        <input type="number" id="isi_kemasan" placeholder="Isi / Berat" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
                     </div>
                     
                     <div class="flex gap-2 mb-5">
-                        <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml)" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm">
-                        <input type="number" id="wastage" placeholder="Wastage %" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm">
+                        <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml)" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
+                        <input type="number" id="wastage" placeholder="Wastage %" class="w-1/2 p-3 border rounded-xl shadow-sm text-sm outline-none">
                     </div>
 
                     <div class="flex gap-2">
                         <button id="btn-simpan" onclick="simpanBahan()" class="w-full bg-green-600 text-white p-4 rounded-xl font-bold shadow-lg uppercase tracking-wider active:scale-95 transition-transform">Simpan Bahan</button>
-                        <button id="btn-batal" onclick="resetForm()" class="hidden w-1/3 bg-gray-400 text-white p-4 rounded-xl font-bold text-xs">BATAL</button>
+                        <button id="btn-batal" onclick="resetForm()" class="hidden w-1/3 bg-gray-400 text-white p-4 rounded-xl font-bold text-xs uppercase">Batal</button>
                     </div>
                 </div>
                 
-                <h3 class="font-bold text-gray-500 mb-4 text-[11px] uppercase tracking-widest">Daftar Bahan Anda</h3>
+                <h3 class="font-bold text-gray-500 mb-4 text-[11px] uppercase tracking-widest flex items-center">
+                    <span class="w-1 h-3 bg-blue-600 mr-2 rounded-full"></span> Daftar Bahan Anda
+                </h3>
                 <div id="list-bahan" class="space-y-4 pb-10">
-                    <!-- Data Masuk Sini -->
+                    <!-- Data List -->
                 </div>
             </div>
 
-            <!-- TAB 2 & 3 -->
-            <div id="tab-kalkulator" class="tab-content p-10 text-center text-gray-400 italic text-sm">Tab Kalkulator menyusul setelah ini rapi.</div>
+            <!-- TAB LAIN -->
+            <div id="tab-kalkulator" class="tab-content p-10 text-center text-gray-400 italic text-sm">Fitur Kalkulator akan kita perbaiki setelah Database Bahan ini mantap.</div>
             <div id="tab-grafik" class="tab-content p-10 text-center text-gray-400 italic text-sm">Fitur Grafik segera hadir.</div>
 
-            <button onclick="handleLogout()" class="w-full text-red-500 text-[10px] mt-10 mb-10 font-bold underline uppercase tracking-tighter">Logout dari Aplikasi</button>
+            <button onclick="handleLogout()" class="w-full text-red-400 text-[10px] mt-10 mb-10 font-bold underline uppercase tracking-tighter">Keluar / Logout</button>
         </div>
     </div>
 
     <div id="toast-container"></div>
 
     <script>
-        // MASUKKAN KEMBALI URL & KEY ANDA
-        const SUPABASE_URL = "ISI_URL_ANDA";
-        const SUPABASE_KEY = "ISI_KEY_ANDA";
+        // MASUKKAN DATA ANDA DISINI
+        const SUPABASE_URL = "URL_ANDA";
+        const SUPABASE_KEY = "KEY_ANDA";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-        function showToast(message) {
-            const container = document.getElementById('toast-container');
-            const toast = document.createElement('div');
-            toast.className = `fixed bottom-12 left-1/2 -translate-x-1/2 bg-gray-900 text-white px-8 py-3 rounded-full shadow-2xl font-bold text-xs z-50 toast-animate`;
-            toast.innerText = message;
-            container.appendChild(toast);
-            setTimeout(() => toast.remove(), 3000);
-        }
-
+        // FUNGSI AUTH (LOGIN/DAFTAR)
         async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
-            const { error } = await supabaseClient.auth.signInWithPassword({ email, password });
-            if (error) alert(error.message);
-            else location.reload();
+            const errorLabel = document.getElementById('auth-error');
+            
+            errorLabel.innerText = "Mengecek...";
+            const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+            
+            if (error) {
+                errorLabel.innerText = "Gagal: " + error.message;
+            } else {
+                location.reload(); // Refresh untuk masuk ke dashboard
+            }
         }
 
         async function handleSignUp() {
@@ -116,7 +117,7 @@
             const password = document.getElementById('password').value;
             const { error } = await supabaseClient.auth.signUp({ email, password });
             if (error) alert(error.message);
-            else showToast("Berhasil Daftar! Silakan Login.");
+            else showToast("Pendaftaran Berhasil! Silakan Cek Email atau Login.");
         }
 
         async function handleLogout() {
@@ -124,26 +125,33 @@
             location.reload();
         }
 
+        // CEK STATUS SAAT BUKA HALAMAN
         window.onload = async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
-                document.getElementById('login-section').classList.add('hidden');
+                document.getElementById('login-section').style.display = 'none';
                 document.getElementById('main-section').classList.remove('hidden');
                 muatDaftarBahan();
             }
         };
 
+        // NAVIGASI TAB
         function openTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
-            document.querySelectorAll('.flex button').forEach(b => {
-                b.classList.remove('border-b-4', 'border-blue-600', 'text-blue-600');
-                b.classList.add('text-gray-400');
+            
+            document.querySelectorAll('#main-section button').forEach(b => {
+                if(b.id.startsWith('btn-tab-')) {
+                    b.classList.remove('border-b-4', 'border-blue-600', 'text-blue-600');
+                    b.classList.add('text-gray-400');
+                }
             });
-            document.getElementById('btn-' + tabId).classList.add('border-b-4', 'border-blue-600', 'text-blue-600');
-            document.getElementById('btn-' + tabId).classList.remove('text-gray-400');
+            const activeBtn = document.getElementById('btn-' + tabId);
+            activeBtn.classList.add('border-b-4', 'border-blue-600', 'text-blue-600');
+            activeBtn.classList.remove('text-gray-400');
         }
 
+        // CRUD BAHAN
         async function simpanBahan() {
             const { data: { user } } = await supabaseClient.auth.getUser();
             const id = document.getElementById('edit-id').value;
@@ -157,7 +165,7 @@
                 wastage: parseFloat(document.getElementById('wastage').value) || 0
             };
 
-            if(!payload.nama_bahan || isNaN(payload.harga_beli)) return alert("Isi data dengan benar!");
+            if(!payload.nama_bahan || !payload.harga_beli) return showToast("Nama & Harga wajib diisi!");
 
             let res;
             if (id) res = await supabaseClient.from('bahan_baku').update(payload).eq('id', id);
@@ -165,7 +173,7 @@
 
             if (res.error) alert(res.error.message);
             else {
-                showToast(id ? "PERUBAHAN DISIMPAN ✅" : "BERHASIL SIMPAN BAHAN ✅");
+                showToast(id ? "Update Berhasil ✅" : "Tersimpan ✅");
                 resetForm();
                 muatDaftarBahan();
             }
@@ -178,15 +186,15 @@
                 list.innerHTML = data.map(b => {
                     const tgl = new Date(b.created_at).toLocaleString('id-ID', { dateStyle: 'medium', timeStyle: 'short' });
                     return `
-                        <div class="p-4 bg-white border border-gray-100 rounded-2xl shadow-sm flex justify-between items-center">
+                        <div class="p-4 bg-white border border-gray-100 rounded-2xl shadow-sm flex justify-between items-center active:bg-gray-50 transition-colors">
                             <div class="flex-1">
-                                <p class="font-bold text-gray-800 text-lg mb-0.5">${b.nama_bahan}</p>
-                                <p class="text-blue-600 font-bold text-sm mb-2">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
-                                <p class="text-[10px] text-gray-400 font-medium">${tgl} WIB • <span class="text-blue-400 uppercase">${b.kategori}</span></p>
+                                <p class="font-bold text-gray-800 text-lg mb-0.5 leading-tight">${b.nama_bahan}</p>
+                                <p class="text-blue-600 font-bold text-[15px] mb-2">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
+                                <p class="text-[10px] text-gray-400 font-medium uppercase tracking-tighter italic">${tgl} WIB • <span class="text-blue-400">${b.kategori}</span></p>
                             </div>
                             <div class="flex flex-col gap-2 ml-4">
-                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="bg-white border border-blue-500 text-blue-500 font-bold text-[10px] px-4 py-2 rounded-lg active:bg-blue-50">EDIT</button>
-                                <button onclick="hapusBahan(${b.id})" class="bg-white border border-red-500 text-red-500 font-bold text-[10px] px-4 py-2 rounded-lg active:bg-red-50">HAPUS</button>
+                                <button onclick='siapkanEdit(${JSON.stringify(b)})' class="bg-white border-2 border-blue-500 text-blue-500 font-bold text-[10px] px-4 py-2 rounded-xl">EDIT</button>
+                                <button onclick="hapusBahan(${b.id})" class="bg-white border-2 border-red-500 text-red-500 font-bold text-[10px] px-4 py-2 rounded-xl">HAPUS</button>
                             </div>
                         </div>
                     `;
@@ -195,7 +203,7 @@
         }
 
         function siapkanEdit(b) {
-            document.getElementById('form-title').innerText = "EDIT BAHAN";
+            document.getElementById('form-title').innerText = "EDIT DATA BAHAN";
             document.getElementById('edit-id').value = b.id;
             document.getElementById('nama_bahan').value = b.nama_bahan;
             document.getElementById('kategori_bahan').value = b.kategori;
@@ -203,7 +211,7 @@
             document.getElementById('isi_kemasan').value = b.isi_kemasan;
             document.getElementById('satuan_bahan').value = b.satuan;
             document.getElementById('wastage').value = b.wastage;
-            document.getElementById('btn-simpan').innerText = "UPDATE DATA";
+            document.getElementById('btn-simpan').innerText = "UPDATE SEKARANG";
             document.getElementById('btn-batal').classList.remove('hidden');
             window.scrollTo({ top: 0, behavior: 'smooth' });
         }
@@ -221,11 +229,20 @@
         }
 
         async function hapusBahan(id) {
-            if(confirm("Hapus bahan ini?")) {
+            if(confirm("Hapus bahan ini secara permanen?")) {
                 await supabaseClient.from('bahan_baku').delete().eq('id', id);
-                showToast("BAHAN DIHAPUS");
+                showToast("Dihapus 🗑️");
                 muatDaftarBahan();
             }
+        }
+
+        function showToast(message) {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            toast.className = `fixed bottom-12 left-1/2 -translate-x-1/2 bg-gray-800 text-white px-8 py-3 rounded-full shadow-2xl font-bold text-xs z-50 toast-animate`;
+            toast.innerText = message;
+            container.appendChild(toast);
+            setTimeout(() => toast.remove(), 3000);
         }
     </script>
 </body>
