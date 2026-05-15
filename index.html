@@ -16,6 +16,7 @@
         <header class="bg-blue-600 p-4 text-white text-center font-bold text-xl shadow-md">
             SMART KALKULATOR HPP
         </header>
+
         <!-- AREA LOGIN -->
         <div id="login-section" class="p-6">
             <h2 class="text-center text-lg font-semibold mb-4 text-gray-700">Akses Pengguna</h2>
@@ -28,6 +29,7 @@
             <!-- Pesan Error/Status -->
             <p id="auth-msg" class="text-xs mt-4 text-center font-medium"></p>
         </div>
+
         <!-- AREA APLIKASI UTAMA -->
         <div id="main-section" class="hidden">
             <div class="flex border-b text-sm">
@@ -35,6 +37,7 @@
                 <button onclick="openTab('tab-kalkulator')" id="btn-tab-kalkulator" class="w-1/3 py-3 font-semibold text-gray-500">KALKULATOR</button>
                 <button onclick="openTab('tab-grafik')" id="btn-tab-grafik" class="w-1/3 py-3 font-semibold text-gray-500">GRAFIK</button>
             </div>
+
             <div id="tab-bahan" class="tab-content active p-4">
                 <div class="bg-blue-50 p-3 rounded-lg border border-blue-200 mb-4">
                     <h3 class="font-bold text-blue-800 mb-2 text-sm uppercase">Tambah Bahan Baru</h3>
@@ -64,9 +67,11 @@
                     <p class="text-gray-400 italic">Memuat data...</p>
                 </div>
             </div>
+
             <div id="tab-kalkulator" class="tab-content p-4">
                 <p class="text-center text-gray-500 italic mt-10">Fitur Kalkulator dalam tahap pengembangan...</p>
             </div>
+
             <div id="tab-grafik" class="tab-content p-4">
                 <p class="text-center text-gray-500 italic mt-10">Fitur Grafik dalam tahap pengembangan...</p>
             </div>
@@ -74,11 +79,13 @@
             <button onclick="handleLogout()" class="w-full text-red-500 text-xs mt-10 mb-10 underline font-bold uppercase">Logout Dari Aplikasi</button>
         </div>
     </div>
+
     <script>
         // KONFIGURASI SUPABASE (Data Anda tetap aman di sini)
         const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
         // Notifikasi Toast (Pengganti Alert)
         function showNotification(text, color = "bg-gray-800") {
             const toast = document.createElement("div");
@@ -87,6 +94,7 @@
             document.body.appendChild(toast);
             setTimeout(() => toast.remove(), 3000);
         }
+
         // CEK STATUS LOGIN SAAT HALAMAN DIBUKA
         window.onload = async () => {
             const { data: { session } } = await supabaseClient.auth.getSession();
@@ -94,19 +102,24 @@
                 showApp();
             }
         };
+
         // FUNGSI DAFTAR BARU
         async function handleSignUp() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const msg = document.getElementById('auth-msg');
+
             if (!email || !password) {
                 msg.innerText = "Email dan Password harus diisi!";
                 msg.className = "text-red-500 text-xs mt-3 text-center";
                 return;
             }
+
             msg.innerText = "Mendaftarkan...";
             msg.className = "text-blue-500 text-xs mt-3 text-center";
+
             const { data, error } = await supabaseClient.auth.signUp({ email, password });
+
             if (error) {
                 msg.innerText = "Gagal: " + error.message;
                 msg.className = "text-red-500 text-xs mt-3 text-center";
@@ -116,17 +129,21 @@
                 showNotification("PENDAFTARAN BERHASIL ✅", "bg-green-600");
             }
         }
+
         // FUNGSI LOGIN
         async function handleLogin() {
             const email = document.getElementById('email').value;
             const password = document.getElementById('password').value;
             const msg = document.getElementById('auth-msg');
+
             if (!email || !password) {
                 msg.innerText = "Masukkan Email & Password!";
                 msg.className = "text-red-500 text-xs mt-3 text-center";
                 return;
             }
+
             const { data, error } = await supabaseClient.auth.signInWithPassword({ email, password });
+
             if (error) {
                 msg.innerText = "Gagal Login: " + error.message;
                 msg.className = "text-red-500 text-xs mt-3 text-center";
@@ -134,16 +151,19 @@
                 showApp();
             }
         }
+
         // FUNGSI LOGOUT
         async function handleLogout() {
             await supabaseClient.auth.signOut();
             location.reload();
         }
+
         function showApp() {
             document.getElementById('login-section').classList.add('hidden');
             document.getElementById('main-section').classList.remove('hidden');
             muatDaftarBahan();
         }
+
         function openTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
             document.getElementById(tabId).classList.add('active');
@@ -156,6 +176,7 @@
             
             if(tabId === 'tab-bahan') muatDaftarBahan();
         }
+
         // SIMPAN DATA KE DATABASE
         async function simpanBahan() {
             const { data: { user } } = await supabaseClient.auth.getUser();
@@ -168,10 +189,12 @@
                 satuan: document.getElementById('satuan_bahan').value,
                 wastage: parseFloat(document.getElementById('wastage').value) || 0
             };
+
             if (!payload.nama_bahan || isNaN(payload.harga_beli)) {
                 showNotification("Lengkapi Nama & Harga! ⚠️", "bg-orange-500");
                 return;
             }
+
             const { error } = await supabaseClient.from('bahan_baku').insert([payload]);
             if (error) {
                 alert("Gagal menyimpan: " + error.message);
@@ -187,6 +210,7 @@
                 muatDaftarBahan();
             }
         }
+
         // TAMPILKAN DATA DARI DATABASE
         async function muatDaftarBahan() {
             const { data, error } = await supabaseClient.from('bahan_baku').select('*').order('created_at', { ascending: false });
@@ -207,6 +231,7 @@
                 `).join('');
             }
         }
+
         async function hapusBahan(id) {
             if(confirm("Hapus bahan ini secara permanen?")) {
                 const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', id);
