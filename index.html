@@ -151,7 +151,12 @@
             if (error) {
                 alert("Gagal menyimpan: " + error.message);
             } else {
-                alert("Bahan disimpan!");
+                // Ganti alert lama dengan ini agar muncul notifikasi keren di bawah layar
+                const toast = document.createElement("div");
+                toast.className = "fixed bottom-20 left-1/2 -translate-x-1/2 bg-green-600 text-white px-6 py-3 rounded-full shadow-xl font-bold text-sm z-50 animate-bounce";
+                toast.innerText = "BERHASIL SIMPAN BAHAN ✅";
+                document.body.appendChild(toast);
+                setTimeout(() => toast.remove(), 3000); // Hilang otomatis dalam 3 detik
                 // Kosongkan form sesuai permintaan
                 document.getElementById('nama_bahan').value = "";
                 document.getElementById('harga_beli').value = "";
@@ -188,3 +193,4 @@
     </script>
 </body>
 </html>
+
