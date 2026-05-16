@@ -95,6 +95,8 @@
         const SUPABASE_URL = "https://dyqqjciibbpwujrgvlpc.supabase.co";
         const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImR5cXFqY2lpYmJwd3Vqcmd2bHBjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Nzg3MTQ1NTgsImV4cCI6MjA5NDI5MDU1OH0.slED2x8TrP8IzGzGxa58wkpxNcSCzsgqPRSXoup_N0M";
         const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        // TAMBAHKAN BARIS INI (Untuk menyimpan ID bahan yang akan dihapus)
+        let idBahanAkanDihapus = null;
 
         // CEK LOGIN SAAT HALAMAN DIBUKA
         window.onload = async () => {
@@ -199,30 +201,32 @@
         // Variabel untuk menyimpan ID yang akan dihapus
         let idHapus = null;
         
-        // Fungsi untuk memunculkan modal
+        // GANTI FUNGSI openModalHapus LAMA DENGAN INI
         function openModalHapus(id) {
-            idHapus = id;
+            idBahanAkanDihapus = id; // Menyimpan ID bahan ke dalam variabel global
             const modal = document.getElementById('modal-hapus');
             modal.classList.remove('hidden');
             modal.classList.add('flex');
         }
         
-        // Fungsi untuk menutup modal
+        // PASTIKAN FUNGSI closeModalHapus ANDA SEPERTI INI
         function closeModalHapus() {
             const modal = document.getElementById('modal-hapus');
             modal.classList.add('hidden');
             modal.classList.remove('flex');
-            idHapus = null;
+            idBahanAkanDihapus = null; // Membersihkan ID setelah modal ditutup
         }
         
-        // Logika klik tombol "Oke" di dalam modal
+        // GANTI LOGIKA KLIK TOMBOL CONFIRM LAMA DENGAN INI
         document.getElementById('confirm-delete-btn').onclick = async () => {
-            if (idHapus) {
-                const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idHapus);
+            if (idBahanAkanDihapus) {
+                const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idBahanAkanDihapus);
                 if (!error) {
                     closeModalHapus();
-                    showToast("BERHASIL HAPUS<br>DATA BAHAN");
+                    showNotification("BAHAN DIHAPUS 🗑️", "bg-red-500"); 
                     muatDaftarBahan();
+                } else {
+                    alert("Gagal menghapus dari database: " + error.message);
                 }
             }
         };
