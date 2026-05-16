@@ -42,18 +42,19 @@
                     <h3 class="font-bold text-blue-800 mb-2 text-sm uppercase">Tambah Bahan Baru</h3>
                     <div class="grid grid-cols-1 gap-2">
                         <input type="text" id="nama_bahan" placeholder="Nama Bahan" class="p-2 border rounded text-sm">
-                        <select id="kategori_bahan" class="p-2 border rounded text-sm">
+                        <select id="kategori_bahan" class="p-3 border border-gray-200 rounded-lg text-sm bg-gray-50 outline-none">
                             <option value="Karbo">Karbo</option>
                             <option value="Protein">Protein</option>
                             <option value="Sayur">Sayur</option>
                             <option value="Bumbu">Bumbu</option>
+                            <option value="Lain-lain">Lain-lain</option>
                         </select>
                         <div class="flex gap-2">
                             <input type="number" id="harga_beli" placeholder="Harga Beli (Rp)" class="w-1/2 p-2 border rounded text-sm">
                             <input type="number" id="isi_kemasan" placeholder="Isi Kemasan" class="w-1/2 p-2 border rounded text-sm">
                         </div>
                         <div class="flex gap-2">
-                            <input type="text" id="satuan_bahan" placeholder="Satuan (gr/ml/pcs)" class="w-1/2 p-2 border rounded text-sm">
+                            <input type="text" id="satuan_bahan" placeholder="Satuan (gpcs)" class="w-1/2 p-2 border rounded text-sm">
                             <input type="number" id="wastage" placeholder="Wastage (%)" class="w-1/2 p-2 border rounded text-sm">
                         </div>
                         <button onclick="simpanBahan()" class="w-full bg-green-600 text-white p-2 rounded font-bold mt-2 shadow">SIMPAN BAHAN</button>
