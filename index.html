@@ -78,6 +78,17 @@
             
             <button onclick="handleLogout()" class="w-full text-red-500 text-xs mt-10 underline">LOGOUT DARI APLIKASI</button>
         </div>
+        
+        <div id="modal-hapus" class="hidden fixed inset-0 z-[1000] items-center justify-center p-6" style="background: rgba(0,0,0,0.5); backdrop-filter: blur(2px);">
+            <div class="bg-white rounded-2xl w-full max-w-xs p-6 shadow-2xl text-center">
+                <h3 class="font-bold text-gray-800 text-lg mb-2">Hapus Bahan?</h3>
+                <p class="text-gray-500 text-sm mb-6 leading-relaxed">Data bahan ini akan dihapus secara permanen dari daftar.</p>
+                <div class="flex gap-3">
+                    <button onclick="closeModalHapus()" class="w-1/2 py-3 rounded-xl font-bold text-gray-400 bg-gray-100 uppercase text-[10px] tracking-wider">Batal</button>
+                    <button id="confirm-delete-btn" class="w-1/2 py-3 rounded-xl font-bold text-white bg-red-500 uppercase text-[10px] tracking-wider shadow-md">Ya, Hapus</button>
+                </div>
+            </div>
+        </div>
     </div>
 
     <script>
@@ -179,18 +190,42 @@
                             <p class="text-blue-600 font-semibold">Rp ${b.harga_beli.toLocaleString()} / ${b.isi_kemasan} ${b.satuan}</p>
                             <p class="text-[10px] text-gray-400 italic">${new Date(b.created_at).toLocaleString('id-ID')}</p>
                         </div>
-                        <button onclick="hapusBahan(${b.id})" class="text-red-500 font-bold border border-red-200 px-2 py-1 rounded bg-white">HAPUS</button>
+                        <button onclick="openModalHapus(${b.id})" class="text-red-500 font-bold border border-red-200 px-2 py-1 rounded bg-white">HAPUS</button>
                     </div>
                 `).join('');
             }
         }
 
-        async function hapusBahan(id) {
-            if(confirm("Hapus bahan ini secara permanen?")) {
-                await supabaseClient.from('bahan_baku').delete().eq('id', id);
-                muatDaftarBahan();
-            }
+// Variabel untuk menyimpan ID yang akan dihapus
+let idHapus = null;
+
+// Fungsi untuk memunculkan modal
+function openModalHapus(id) {
+    idHapus = id;
+    const modal = document.getElementById('modal-hapus');
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+}
+
+// Fungsi untuk menutup modal
+function closeModalHapus() {
+    const modal = document.getElementById('modal-hapus');
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    idHapus = null;
+}
+
+// Logika klik tombol "Ya, Hapus" di dalam modal
+document.getElementById('confirm-delete-btn').onclick = async () => {
+    if (idHapus) {
+        const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idHapus);
+        if (!error) {
+            closeModalHapus();
+            showToast("BERHASIL HAPUS<br>DATA BAHAN"); 
+            muatDaftarBahan();
         }
+    }
+};
     </script>
 </body>
 </html>
