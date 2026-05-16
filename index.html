@@ -195,37 +195,37 @@
                 `).join('');
             }
         }
-
-// Variabel untuk menyimpan ID yang akan dihapus
-let idHapus = null;
-
-// Fungsi untuk memunculkan modal
-function openModalHapus(id) {
-    idHapus = id;
-    const modal = document.getElementById('modal-hapus');
-    modal.classList.remove('hidden');
-    modal.classList.add('flex');
-}
-
-// Fungsi untuk menutup modal
-function closeModalHapus() {
-    const modal = document.getElementById('modal-hapus');
-    modal.classList.add('hidden');
-    modal.classList.remove('flex');
-    idHapus = null;
-}
-
-// Logika klik tombol "Ya, Hapus" di dalam modal
-document.getElementById('confirm-delete-btn').onclick = async () => {
-    if (idHapus) {
-        const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idHapus);
-        if (!error) {
-            closeModalHapus();
-            showToast("BERHASIL HAPUS<br>DATA BAHAN"); 
-            muatDaftarBahan();
+        
+        // Variabel untuk menyimpan ID yang akan dihapus
+        let idHapus = null;
+        
+        // Fungsi untuk memunculkan modal
+        function openModalHapus(id) {
+            idHapus = id;
+            const modal = document.getElementById('modal-hapus');
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
         }
-    }
-};
+        
+        // Fungsi untuk menutup modal
+        function closeModalHapus() {
+            const modal = document.getElementById('modal-hapus');
+            modal.classList.add('hidden');
+            modal.classList.remove('flex');
+            idHapus = null;
+        }
+        
+        // Logika klik tombol "Oke" di dalam modal
+        document.getElementById('confirm-delete-btn').onclick = async () => {
+            if (idHapus) {
+                const { error } = await supabaseClient.from('bahan_baku').delete().eq('id', idHapus);
+                if (!error) {
+                    closeModalHapus();
+                    showToast("BERHASIL HAPUS<br>DATA BAHAN");
+                    muatDaftarBahan();
+                }
+            }
+        };
     </script>
 </body>
 </html>
